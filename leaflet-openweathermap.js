@@ -24,7 +24,7 @@ L.OWM = L.TileLayer.extend({
 
 	onAdd: function(map) {
 		this._map = map;
-		if (this.options.showLegend && this.options.legendImagePath != null) {
+		if (this.options.showLegend && this.options.legendImagePath !== null) {
 			this._legendControl = this._getLegendControl();
 			this._legendId = this._legendControl.addLegend(this.options.legendImagePath);
 		}
@@ -32,7 +32,7 @@ L.OWM = L.TileLayer.extend({
 	},
 
 	onRemove: function(map) {
-		if (this._legendControl != null) {
+		if (this._legendControl !== null) {
 			this._legendControl.removeLegend(this._legendId);
 			this._legendControl = null;
 			this._legendId = null;
@@ -62,7 +62,7 @@ L.OWM = L.TileLayer.extend({
 	});
 	L.OWM.precipitationClassic = function (options) {
 		var layer = new L.OWM.PrecipitationClassic(options);
-		if (layer.options.legendImagePath == null) {
+		if (layer.options.legendImagePath === null) {
 			layer.options.legendImagePath = 'http://openweathermap.org/img/a/PR.png';
 		}
 		return layer;
@@ -78,7 +78,7 @@ L.OWM = L.TileLayer.extend({
 	});
 	L.OWM.rainClassic = function (options) {
 		var layer = new L.OWM.RainClassic(options);
-		if (layer.options.legendImagePath == null) {
+		if (layer.options.legendImagePath === null) {
 			layer.options.legendImagePath = 'http://openweathermap.org/img/a/RN.png';
 		}
 		return layer;
@@ -89,7 +89,7 @@ L.OWM = L.TileLayer.extend({
 	});
 	L.OWM.snow = function (options) { 
 		var layer = new L.OWM.Snow(options);
-		if (layer.options.legendImagePath == null) {
+		if (layer.options.legendImagePath === null) {
 			layer.options.legendImagePath = 'http://openweathermap.org/img/a/SN.png';
 		}
 		return layer; 
@@ -105,7 +105,7 @@ L.OWM = L.TileLayer.extend({
 	});
 	L.OWM.cloudsClassic = function (options) {
 		var layer = new L.OWM.CloudsClassic(options);
-		if (layer.options.legendImagePath == null) {
+		if (layer.options.legendImagePath === null) {
 			layer.options.legendImagePath = 'http://openweathermap.org/img/a/NT.png';
 		}
 		return layer;
@@ -116,7 +116,7 @@ L.OWM = L.TileLayer.extend({
 	});
 	L.OWM.pressure = function (options) {
 		var layer = new L.OWM.Pressure(options);
-		if (layer.options.legendImagePath == null) {
+		if (layer.options.legendImagePath === null) {
 			layer.options.legendImagePath = 'http://openweathermap.org/img/a/PN.png';
 		}
 		return layer;
@@ -132,7 +132,7 @@ L.OWM = L.TileLayer.extend({
 	});
 	L.OWM.temperature = function (options) { 
 		var layer = new L.OWM.Temperature(options);
-		if (layer.options.legendImagePath == null) {
+		if (layer.options.legendImagePath === null) {
 			layer.options.legendImagePath = 'http://openweathermap.org/img/a/TT.png';
 		}
 		return layer;
@@ -143,7 +143,7 @@ L.OWM = L.TileLayer.extend({
 	});
 	L.OWM.wind = function (options) { 
 		var layer = new L.OWM.Wind(options);
-		if (layer.options.legendImagePath == null) {
+		if (layer.options.legendImagePath === null) {
 			layer.options.legendImagePath = 'http://openweathermap.org/img/a/UV.png';
 		}
 		return layer;
@@ -161,7 +161,7 @@ L.OWM.LegendControl = L.Control.extend({
 		this._container = L.DomUtil.create('div', 'owm-legend-container');
 		this._container.style.display = 'none';
 		this._legendCounter = 0;
-		this._legendContainer = new Array();
+		this._legendContainer = [];
 	},
 
 	onAdd: function(map) {
@@ -260,7 +260,7 @@ L.OWM.Current = L.Class.extend({
 		this._layer = L.layerGroup();
 		this._timeoutId = null;
 		this._requests = {};
-		this._markers = new Array();
+		this._markers = [];
 		this._markedMarker = null;
 		this._map = null;
 		this._urlTemplate = 'http://api.openweathermap.org/data/2.1/find/{type}?{appId}bbox={minlon},{minlat},{maxlon},{maxlat},10';
@@ -275,14 +275,14 @@ L.OWM.Current = L.Class.extend({
 			} else {
 				bgIcon = this.options.imageUrlCity.replace('{icon}', '10d');
 				if (this.options.type != 'city') {
-					var bgIcon = this.options.imageUrlStation;
+					bgIcon = this.options.imageUrlStation;
 				}
 			}
 			this._progressCtrl = L.OWM.progressControl({
-					type: this.options.type
-					, bgImage: bgIcon
-					, imageLoadingUrl: this.options.imageLoadingUrl
-					, owmInstance: this
+				type: this.options.type,
+				bgImage: bgIcon,
+				imageLoadingUrl: this.options.imageLoadingUrl,
+				owmInstance: this
 			});
 		}
 		this._cache = L.OWM.currentCache({ maxAge: this.options.cacheMaxAge });
@@ -293,7 +293,7 @@ L.OWM.Current = L.Class.extend({
 		this._map.addLayer(this._layer);
 		this._map.on('moveend', this.update, this);
 		// add progress control
-		if (this._progressCtrl != null) {
+		if (this._progressCtrl !== null) {
 			this._map.addControl(this._progressCtrl);
 		}
 		this.update();
@@ -306,7 +306,7 @@ L.OWM.Current = L.Class.extend({
 			this._timeoutId = null;
 		}
 		// remove progress control
-		if (this._progressCtrl != null) {
+		if (this._progressCtrl !== null) {
 			this._map.removeControl(this._progressCtrl);
 		}
 		// remove layer and markers
@@ -318,8 +318,8 @@ L.OWM.Current = L.Class.extend({
 	},
 
 	getAttribution: function() {
-		return 'Weather from <a href="http://openweathermap.org/" '
-			+ 'alt="World Map and worldwide Weather Forecast online">OpenWeatherMap</a>';
+		return 'Weather from <a href="http://openweathermap.org/" ' +
+			'alt="World Map and worldwide Weather Forecast online">OpenWeatherMap</a>';
 	},
 
 	update: function() {
@@ -377,12 +377,12 @@ L.OWM.Current = L.Class.extend({
 				if (_this.options.caching) {
 					_this._cache.set(data, _this._map.getBounds());
 				}
-				_this._processRequestedData(_this, typeof data.list == 'undefined' ? new Array() : data.list);
+				_this._processRequestedData(_this, typeof data.list == 'undefined' ? [] : data.list);
 				_this.fire('owmloadingend', {type: _this.options.type});
 			});
 		}
 		if (this.options.intervall && this.options.intervall > 0) {
-			this._timeoutId = window.setTimeout(function() {_this.update()}, 60000*this.options.intervall);
+			this._timeoutId = window.setTimeout(function() {_this.update();}, 60000 * this.options.intervall);
 		}
 	},
 
@@ -414,34 +414,37 @@ L.OWM.Current = L.Class.extend({
 		_this._layer.clearLayers();
 
 		// add the stations/cities as markers to the LayerGroup
-		_this._markers = new Array();
-		for (var key in stations) {
+		_this._markers = [];
+		for (var k in stations) {
 			var marker;
-			if (_this.options.markerFunction != null && typeof _this.options.markerFunction == 'function') {
-				marker = _this.options.markerFunction.call(_this, stations[key]);
+			if (_this.options.markerFunction !== null && typeof _this.options.markerFunction == 'function') {
+				marker = _this.options.markerFunction.call(_this, stations[k]);
 			} else {
-				marker = _this._createMarker(stations[key]);
+				marker = _this._createMarker(stations[k]);
 			}
-			marker.options.owmId = stations[key].id;
+			marker.options.owmId = stations[k].id;
 			_this._layer.addLayer(marker);
 			_this._markers.push(marker);
 			if (_this.options.popup) {
-				if (_this.options.popupFunction != null && typeof _this.options.popupFunction == 'function') {
-					marker.bindPopup(_this.options.popupFunction.call(_this, stations[key]));
+				if (_this.options.popupFunction !== null && typeof _this.options.popupFunction == 'function') {
+					marker.bindPopup(_this.options.popupFunction.call(_this, stations[k]));
 				} else {
-					marker.bindPopup(_this._createPopup(stations[key]));
+					marker.bindPopup(_this._createPopup(stations[k]));
 				}
 			}
-			if (markerWithPopup != null
-					&& typeof markerWithPopup.options.owmId != 'undefined'
-					&& markerWithPopup.options.owmId == marker.options.owmId) {
+			if (
+				markerWithPopup !== null && 
+				typeof markerWithPopup.options.owmId != 'undefined' &&
+				markerWithPopup.options.owmId == marker.options.owmId
+			) {
 				markerWithPopup = marker;
 			}
 		}
 
 		// add the LayerGroup to the map
-		_this._map && _this._map.addLayer(_this._layer);
-		if (markerWithPopup != null) {
+		//_this._map && _this._map.addLayer(_this._layer);
+		_this._map.addLayer(_this._layer);
+		if (markerWithPopup !== null) {
 			markerWithPopup.openPopup();
 		}
 		_this.fire('owmlayeradd', {markers: _this._markers});
@@ -467,8 +470,8 @@ L.OWM.Current = L.Class.extend({
 			if (typeof station.weather != 'undefined') {
 				typ = 'city';
 			}
-			txt += '<a href="http://openweathermap.org/' + typ + '/' + station.id + '" target="_blank" title="'
-				+ this.i18n('owmlinktitle', 'Details at OpenWeatherMap') + '">';
+			txt += '<a href="http://openweathermap.org/' + typ + '/' + station.id + '" target="_blank" title="' + 
+				this.i18n('owmlinktitle', 'Details at OpenWeatherMap') + '">';
 		}
 		txt += station.name;
 		if (showLink) {
@@ -477,78 +480,78 @@ L.OWM.Current = L.Class.extend({
 		txt += '</div>';
 		if (typeof station.weather != 'undefined' && typeof station.weather[0] != 'undefined') {
 			if (typeof station.weather[0].description != 'undefined' && typeof station.weather[0].id != 'undefined') {
-				txt += '<div class="owm-popup-description">'
-					+ this.i18n('id'+station.weather[0].id, station.weather[0].description + ' (' + station.weather[0].id + ')')
-					+ '</div>';
+				txt += '<div class="owm-popup-description">' + 
+					this.i18n('id'+station.weather[0].id, station.weather[0].description + ' (' + station.weather[0].id + ')') + 
+					'</div>';
 			}
 		}
 		var imgData = this._getImageData(station);
-		txt += '<div class="owm-popup-main"><img src="' + imgData.url + '" width="' + imgData.width
-				+ '" height="' + imgData.height + '" border="0" />';
+		txt += '<div class="owm-popup-main"><img src="' + imgData.url + '" width="' + imgData.width +
+			'" height="' + imgData.height + '" border="0" />';
 		if (typeof station.main != 'undefined' && typeof station.main.temp != 'undefined') {
-			txt += '<span class="owm-popup-temp">' + this._temperatureConvert(station.main.temp)
-				+ '&nbsp;' + this._displayTemperatureUnit() + '</span>';
+			txt += '<span class="owm-popup-temp">' + this._temperatureConvert(station.main.temp) +
+				'&nbsp;' + this._displayTemperatureUnit() + '</span>';
 		}
 		txt += '</div>';
 		txt += '<div class="owm-popup-details">';
 		if (typeof station.main != 'undefined') {
 			if (typeof station.main.humidity != 'undefined') {
-				txt += '<div class="owm-popup-detail">'
-					+ this.i18n('humidity', 'Humidity')
-					+ ': ' + station.main.humidity + '&nbsp;%</div>';
+				txt += '<div class="owm-popup-detail">' +
+					this.i18n('humidity', 'Humidity') +
+					': ' + station.main.humidity + '&nbsp;%</div>';
 			}
 			if (typeof station.main.pressure != 'undefined') {
-				txt += '<div class="owm-popup-detail">'
-					+ this.i18n('pressure', 'Pressure')
-					+ ': ' + station.main.pressure + '&nbsp;hPa</div>';
+				txt += '<div class="owm-popup-detail">' +
+					this.i18n('pressure', 'Pressure') +
+					': ' + station.main.pressure + '&nbsp;hPa</div>';
 			}
 			if (this.options.showTempMinMax) {
 				if (typeof station.main.temp_max != 'undefined' && typeof station.main.temp_min != 'undefined') {
-					txt += '<div class="owm-popup-detail">'
-						+ this.i18n('temp_minmax', 'Temp. min/max')
-						+ ': '
-							+ this._temperatureConvert(station.main.temp_min)
-						+ '&nbsp;/&nbsp;'
-						+ this._temperatureConvert(station.main.temp_max)
-						+ '&nbsp;' + this._displayTemperatureUnit() + '</div>';
+					txt += '<div class="owm-popup-detail">' +
+						this.i18n('temp_minmax', 'Temp. min/max') +
+						': ' +
+						this._temperatureConvert(station.main.temp_min) +
+						'&nbsp;/&nbsp;' +
+						this._temperatureConvert(station.main.temp_max) +
+						'&nbsp;' + this._displayTemperatureUnit() + '</div>';
 				}
 			}
 		}
 		if (typeof station.rain != 'undefined' && typeof station.rain['1h'] != 'undefined') {
-			txt += '<div class="owm-popup-detail">'
-				+ this.i18n('rain_1h', 'Rain (1h)')
-				+ ': ' + station.rain['1h'] + '&nbsp;ml</div>';
+			txt += '<div class="owm-popup-detail">' +
+				this.i18n('rain_1h', 'Rain (1h)') +
+				': ' + station.rain['1h'] + '&nbsp;ml</div>';
 		}
 		if (typeof station.wind != 'undefined') {
 			if (typeof station.wind.speed != 'undefined') {
 				txt += '<div class="owm-popup-detail">';
 				if (this.options.showWindSpeed == 'beaufort' || this.options.showWindSpeed == 'both') {
-					txt += this.i18n('windforce', 'Wind Force')
-						+ ': ' + this._windMsToBft(station.wind.speed);
+					txt += this.i18n('windforce', 'Wind Force') +
+						': ' + this._windMsToBft(station.wind.speed);
 					if (this.options.showWindSpeed == 'both') {
-						txt += '&nbsp;(' + this._convertSpeed(station.wind.speed) + '&nbsp;'
-							+ this._displaySpeedUnit() + ')';
+						txt += '&nbsp;(' + this._convertSpeed(station.wind.speed) + '&nbsp;' +
+							this._displaySpeedUnit() + ')';
 					}
 				} else {
-					txt += this.i18n('wind', 'Wind') + ': '
-						+ this._convertSpeed(station.wind.speed) + '&nbsp;'
-						+ this._displaySpeedUnit();
+					txt += this.i18n('wind', 'Wind') + ': ' +
+						this._convertSpeed(station.wind.speed) + '&nbsp;' +
+						this._displaySpeedUnit();
 				}
 				txt += '</div>';
 			}
 			if (typeof station.wind.gust != 'undefined') {
 				txt += '<div class="owm-popup-detail">';
 				if (this.options.showWindSpeed == 'beaufort' || this.options.showWindSpeed == 'both') {
-					txt += this.i18n('gust', 'Gust')
-						+ ': ' + this._windMsToBft(station.wind.gust);
+					txt += this.i18n('gust', 'Gust') +
+						': ' + this._windMsToBft(station.wind.gust);
 					if (this.options.showWindSpeed == 'both') {
-						txt += '&nbsp;(' + this._convertSpeed(station.wind.gust) + '&nbsp;'
-							+ this._displaySpeedUnit() + ')';
+						txt += '&nbsp;(' + this._convertSpeed(station.wind.gust) + '&nbsp;' +
+							this._displaySpeedUnit() + ')';
 					}
 				} else {
-					txt += this.i18n('gust', 'Gust') + ': '
-						+ this._convertSpeed(station.wind.gust) + '&nbsp;'
-						+ this._displaySpeedUnit();
+					txt += this.i18n('gust', 'Gust') + ': ' +
+						this._convertSpeed(station.wind.gust) + '&nbsp;' +
+						this._displaySpeedUnit();
 				}
 				txt += '</div>';
 			}
@@ -597,22 +600,22 @@ L.OWM.Current = L.Class.extend({
 	_createMarker: function(station) {
 		var imageData = this._getImageData(station);
 		var icon = L.divIcon({
-						className: ''
-						, iconAnchor: new L.Point(25, imageData.height/2)
-						, popupAnchor: new L.Point(0, -10)
-						, html: this._icondivtext(station, imageData.url, imageData.width, imageData.height)
-					});
+			className: '',
+			iconAnchor: new L.Point(25, imageData.height/2),
+			popupAnchor: new L.Point(0, -10),
+			html: this._icondivtext(station, imageData.url, imageData.width, imageData.height)
+		});
 		var marker = L.marker([station.coord.lat, station.coord.lon], {icon: icon});
 		return marker;
 	},
 
 	_icondivtext: function(station, imageurl, width, height) {
 		var txt = '';
-		txt += '<div class="owm-icondiv">'
-			+ '<img src="' + imageurl + '" border="0" width="' + width + '" height="' + height + '" />';
+		txt += '<div class="owm-icondiv">' +
+			'<img src="' + imageurl + '" border="0" width="' + width + '" height="' + height + '" />';
 		if (typeof station.main != 'undefined' && typeof station.main.temp != 'undefined') {
-			txt += '<div class="owm-icondiv-temp">' + this._temperatureConvert(station.main.temp)
-				+ '&nbsp;' + this._displayTemperatureUnit() + '</div>';
+			txt += '<div class="owm-icondiv-temp">' + this._temperatureConvert(station.main.temp) +
+				'&nbsp;' + this._displayTemperatureUnit() + '</div>';
 		}
 		txt += '</div>';
 		return txt;
@@ -632,7 +635,8 @@ L.OWM.Current = L.Class.extend({
 	},
 
 	_displayTemperatureUnit: function() {
-		var unit = this._tempUnits['K'];
+		//var unit = this._tempUnits['K'];
+		var unit = this._tempUnits.K;
 		if (typeof this._tempUnits[this.options.temperatureUnit] != 'undefined') {
 			unit = this._tempUnits[this.options.temperatureUnit];
 		}
@@ -654,10 +658,10 @@ L.OWM.Current = L.Class.extend({
 		var unit = 'm/s';
 		switch (this.options.speedUnit) {
 			case 'kmh':
-				unit = 'km/h'
+				unit = 'km/h';
 				break;
 			case 'mph':
-				unit = 'mph'
+				unit = 'mph';
 				break;
 		}
 		return unit;
@@ -686,10 +690,11 @@ L.OWM.Current = L.Class.extend({
 
 	i18n: function(key, fallback) {
 		var lang = this.options.lang;
-		if (typeof L.OWM.Utils.i18n != 'undefined'
-				&& typeof L.OWM.Utils.i18n[lang] != 'undefined'
-				&& typeof L.OWM.Utils.i18n[lang][key] != 'undefined') {
-			return  L.OWM.Utils.i18n[lang][key]
+		if (typeof L.OWM.Utils.i18n != 'undefined' &&
+			typeof L.OWM.Utils.i18n[lang] != 'undefined' &&
+			typeof L.OWM.Utils.i18n[lang][key] != 'undefined'
+		){
+			return  L.OWM.Utils.i18n[lang][key];
 		}
 		return fallback;
 	}
@@ -709,8 +714,8 @@ L.OWM.ProgressControl = L.Control.extend({
 	initialize: function(options) {
 		L.Util.setOptions(this, options);
 		this._container = L.DomUtil.create('div', 'leaflet-control-layers');
-		if (this.options.bgImage != null) {
-			this._container.style.backgroundImage ='url(' + this.options.bgImage + ')';
+		if (this.options.bgImage !== null) {
+			this._container.style.backgroundImage = 'url(' + this.options.bgImage + ')';
 			this._container.style.backgroundRepeat = 'no-repeat';
 			this._container.style.backgroundPosition = 'center center';
 		}
@@ -765,7 +770,7 @@ L.OWM.CurrentCache = L.Class.extend({
 	},
 
 	get: function(minLon, minLat, maxLon, maxLat) {
-		if (this._cachedData == null) {
+		if (this._cachedData === null) {
 			// no cached data available
 			return null;
 		}
@@ -774,20 +779,28 @@ L.OWM.CurrentCache = L.Class.extend({
 			this.clear();
 			return null;
 		}
-		if (minLon <= this._cachedBBox.minLon || minLat <= this._cachedBBox.minLat
-				|| maxLon >= this._cachedBBox.maxLon || maxLat >= this._cachedBBox.maxLat) {
+		if (
+			minLon <= this._cachedBBox.minLon ||
+			minLat <= this._cachedBBox.minLat ||
+			maxLon >= this._cachedBBox.maxLon ||
+			maxLat >= this._cachedBBox.maxLat
+		) {
 			// new area is outside of cached area
 			this.clear();
 			return null;
 		}
 
 		// clip cached data to bounds
-		var clippedStations = new Array();
+		var clippedStations = [];
 		var cnt = 0;
 		for (var k in this._cachedData.list) {
 			var station = this._cachedData.list[k];
-			if (station.coord.lon >= minLon && station.coord.lon <= maxLon
-					&& station.coord.lat >= minLat && station.coord.lat <= maxLat) {
+			if (
+				station.coord.lon >= minLon &&
+				station.coord.lon <= maxLon &&
+				station.coord.lat >= minLat &&
+				station.coord.lat <= maxLat
+			) {
 				clippedStations[k] = station;
 				cnt++;
 			}
@@ -837,289 +850,289 @@ L.OWM.Utils = {
 
 	i18n: {
 		en: {
-			owmlinktitle: 'Details at OpenWeatherMap'
-			, temperature: 'Temperature'
-			, temp_minmax: 'Temp. min/max'
-			, wind: 'Wind'
-			, gust: 'Gust'
-			, windforce: 'Wind Force'
-			, direction: 'Direction'
-			, rain_1h: 'Rain'
-			, humidity: 'Humidity'
-			, pressure: 'Pressure'
+			owmlinktitle: 'Details at OpenWeatherMap',
+			temperature: 'Temperature',
+			temp_minmax: 'Temp. min/max',
+			wind: 'Wind',
+			gust: 'Gust',
+			windforce: 'Wind Force',
+			direction: 'Direction',
+			rain_1h: 'Rain',
+			humidity: 'Humidity',
+			pressure: 'Pressure',
 
-		// weather conditions, see http://openweathermap.org/wiki/API/Weather_Condition_Codes
-			, id200: 'Thunderstorm with Light Rain'
-			, id201: 'Thunderstorm with Rain'
-			, id202: 'Thunderstorm with Heavy Rain'
-			, id210: 'Light Thunderstorm'
-			, id211: 'Thunderstorm'
-			, id212: 'Heavy Thunderstorm'
-			, id221: 'Ragged Thunderstorm'
-			, id230: 'Thunderstorm with Light Drizzle'
-			, id231: 'Thunderstorm with Drizzle'
-			, id232: 'Thunderstorm with Heavy Drizzle'
+			// weather conditions, see http://openweathermap.org/wiki/API/Weather_Condition_Codes,
+			id200: 'Thunderstorm with Light Rain',
+			id201: 'Thunderstorm with Rain',
+			id202: 'Thunderstorm with Heavy Rain',
+			id210: 'Light Thunderstorm',
+			id211: 'Thunderstorm',
+			id212: 'Heavy Thunderstorm',
+			id221: 'Ragged Thunderstorm',
+			id230: 'Thunderstorm with Light Drizzle',
+			id231: 'Thunderstorm with Drizzle',
+			id232: 'Thunderstorm with Heavy Drizzle',
 
-			, id300: 'Light Intensity Drizzle'
-			, id301: 'Drizzle'
-			, id302: 'Heavy Intensity Drizzle'
-			, id310: 'Light Intensity Drizzle Rain'
-			, id311: 'Drizzle Rain'
-			, id312: 'Heavy Intensity Drizzle Rain'
-			, id321: 'Shower Drizzle'
+			id300: 'Light Intensity Drizzle',
+			id301: 'Drizzle',
+			id302: 'Heavy Intensity Drizzle',
+			id310: 'Light Intensity Drizzle Rain',
+			id311: 'Drizzle Rain',
+			id312: 'Heavy Intensity Drizzle Rain',
+			id321: 'Shower Drizzle',
 
-			, id500: 'Light Rain'
-			, id501: 'Moderate Rain'
-			, id502: 'Heavy Intensity Rain'
-			, id503: 'Very Heavy Rain'
-			, id504: 'Extreme Rain'
-			, id511: 'Freezing Rain'
-			, id520: 'Light Intensity Shower Rain'
-			, id521: 'Shower Rain'
-			, id522: 'Heavy Intensity Shower Rain'
+			id500: 'Light Rain',
+			id501: 'Moderate Rain',
+			id502: 'Heavy Intensity Rain',
+			id503: 'Very Heavy Rain',
+			id504: 'Extreme Rain',
+			id511: 'Freezing Rain',
+			id520: 'Light Intensity Shower Rain',
+			id521: 'Shower Rain',
+			id522: 'Heavy Intensity Shower Rain',
 
-			, id600: 'Light Snow'
-			, id601: 'Snow'
-			, id602: 'Heavy Snow'
-			, id611: 'Sleet'
-			, id621: 'Shower Snow'
-			, id622: 'Heavy Shower Snow'
+			id600: 'Light Snow',
+			id601: 'Snow',
+			id602: 'Heavy Snow',
+			id611: 'Sleet',
+			id621: 'Shower Snow',
+			id622: 'Heavy Shower Snow',
 
-			, id701: 'Mist'
-			, id711: 'Smoke'
-			, id721: 'Haze'
-			, id731: 'Sand/Dust Whirls'
-			, id741: 'Fog'
-			, id751: 'Sand'
+			id701: 'Mist',
+			id711: 'Smoke',
+			id721: 'Haze',
+			id731: 'Sand/Dust Whirls',
+			id741: 'Fog',
+			id751: 'Sand',
 
-			, id800: 'Sky is Clear'
-			, id801: 'Few Clouds'
-			, id802: 'Scattered Clouds'
-			, id803: 'Broken Clouds'
-			, id804: 'Overcast Clouds'
+			id800: 'Sky is Clear',
+			id801: 'Few Clouds',
+			id802: 'Scattered Clouds',
+			id803: 'Broken Clouds',
+			id804: 'Overcast Clouds',
 
-			, id900: 'Tornado'
-			, id901: 'Tropical Storm'
-			, id902: 'Hurricane'
-			, id903: 'Cold'
-			, id904: 'Hot'
-			, id905: 'Windy'
-			, id906: 'Hail'
+			id900: 'Tornado',
+			id901: 'Tropical Storm',
+			id902: 'Hurricane',
+			id903: 'Cold',
+			id904: 'Hot',
+			id905: 'Windy',
+			id906: 'Hail'
 		},
 
 		de: {
-			owmlinktitle: 'Details bei OpenWeatherMap'
-			, temperature: 'Temperatur'
-			, temp_minmax: 'Temp. min/max'
-			, wind: 'Wind'
-			, gust: 'Windböen'
-			, windforce: 'Windstärke'
-			, direction: 'Windrichtung'
-			, rain_1h: 'Regen'
-			, humidity: 'Luftfeuchtigkeit'
-			, pressure: 'Luftdruck'
+			owmlinktitle: 'Details bei OpenWeatherMap',
+			temperature: 'Temperatur',
+			temp_minmax: 'Temp. min/max',
+			wind: 'Wind',
+			gust: 'Windböen',
+			windforce: 'Windstärke',
+			direction: 'Windrichtung',
+			rain_1h: 'Regen',
+			humidity: 'Luftfeuchtigkeit',
+			pressure: 'Luftdruck',
 
-		// Wetterbedingungen, siehe http://openweathermap.org/wiki/API/Weather_Condition_Codes
-			, id200: 'Gewitter mit leichtem Regen' // 'Thunderstorm with Light Rain'
-			, id201: 'Gewitter mit Regen' // 'Thunderstorm with Rain'
-			, id202: 'Gewitter mit Starkregen' // 'Thunderstorm with Heavy Rain'
-			, id210: 'Leichtes Gewitter' // 'Light Thunderstorm'
-			, id211: 'Mäßiges Gewitter' // 'Thunderstorm'
-			, id212: 'Starkes Gewitter' // 'Heavy Thunderstorm'
-		//	, id221: 'Ragged Thunderstorm'
-		//	, id230: 'Thunderstorm with Light Drizzle'
-		//	, id231: 'Thunderstorm with Drizzle'
-		//	, id232: 'Thunderstorm with Heavy Drizzle'
+			// Wetterbedingungen, siehe http://openweathermap.org/wiki/API/Weather_Condition_Codes
+			id200: 'Gewitter mit leichtem Regen', // 'Thunderstorm with Light Rain'
+			id201: 'Gewitter mit Regen', // 'Thunderstorm with Rain'
+			id202: 'Gewitter mit Starkregen', // 'Thunderstorm with Heavy Rain'
+			id210: 'Leichtes Gewitter', // 'Light Thunderstorm'
+			id211: 'Mäßiges Gewitter', // 'Thunderstorm'
+			id212: 'Starkes Gewitter', // 'Heavy Thunderstorm'
+		//	id221: 'Ragged Thunderstorm',
+		//	id230: 'Thunderstorm with Light Drizzle',
+		//	id231: 'Thunderstorm with Drizzle',
+		//	id232: 'Thunderstorm with Heavy Drizzle',
 
-			, id300: 'Leichter Nieselregen' // 'Light Intensity Drizzle'
-			, id301: 'Nieselregen' // 'Drizzle'
-			, id302: 'Starker Nieselregen' // 'Heavy Intensity Drizzle'
-		//	, id310: 'Light Intensity Drizzle Rain'
-		//	, id311: 'Drizzle Rain'
-		//	, id312: 'Heavy Intensity Drizzle Rain'
-		//	, id321: 'Shower Drizzle'
+			id300: 'Leichter Nieselregen', // 'Light Intensity Drizzle'
+			id301: 'Nieselregen', // 'Drizzle'
+			id302: 'Starker Nieselregen', // 'Heavy Intensity Drizzle'
+		//	id310: 'Light Intensity Drizzle Rain',
+		//	id311: 'Drizzle Rain',
+		//	id312: 'Heavy Intensity Drizzle Rain',
+		//	id321: 'Shower Drizzle',
 
-			, id500: 'Leichter Regen' // 'Light Rain'
-			, id501: 'Mäßiger Regen' // 'Moderate Rain'
-			, id502: 'Starker Regen' // 'Heavy Intensity Rain'
-			, id503: 'Ergiebiger Regen' // 'Very Heavy Rain'
-			, id504: 'Starkregen' // 'Extreme Rain'
-			, id511: 'Gefrierender Regen' // 'Freezing Rain'
-			, id520: 'Leichte Regenschauer' // 'Light Intensity Shower Rain'
-			, id521: 'Mäßige Regenschauer' // 'Shower Rain'
-			, id522: 'Wolkenbruchartige Regenschauer' // 'Heavy Intensity Shower Rain'
+			id500: 'Leichter Regen', // 'Light Rain'
+			id501: 'Mäßiger Regen', // 'Moderate Rain'
+			id502: 'Starker Regen', // 'Heavy Intensity Rain'
+			id503: 'Ergiebiger Regen', // 'Very Heavy Rain'
+			id504: 'Starkregen', // 'Extreme Rain'
+			id511: 'Gefrierender Regen', // 'Freezing Rain'
+			id520: 'Leichte Regenschauer', // 'Light Intensity Shower Rain'
+			id521: 'Mäßige Regenschauer', // 'Shower Rain'
+			id522: 'Wolkenbruchartige Regenschauer', // 'Heavy Intensity Shower Rain'
 
-			, id600: 'Leichter Schneefall' // 'Light Snow'
-			, id601: 'Mäßiger Schneefall' // 'Snow'
-			, id602: 'Starker Schneefall' // 'Heavy Snow'
-			, id611: 'Schneeregen' // 'Sleet'
-			, id621: 'Schneeschauer' // 'Shower Snow'
-			, id622: 'Starke Schneeschauer' // 'Heavy Shower Snow'
+			id600: 'Leichter Schneefall', // 'Light Snow'
+			id601: 'Mäßiger Schneefall', // 'Snow'
+			id602: 'Starker Schneefall', // 'Heavy Snow'
+			id611: 'Schneeregen', // 'Sleet'
+			id621: 'Schneeschauer', // 'Shower Snow'
+			id622: 'Starke Schneeschauer', // 'Heavy Shower Snow'
 
-			, id701: 'Dunst' // 'Mist'
-			, id711: 'Rauch' // 'Smoke'
-			, id721: 'Eingetrübt' // 'Haze'
-			, id731: 'Sand-/Staubwirbel' // 'Sand/Dust Whirls'
-			, id741: 'Nebel' // 'Fog'
-			, id751: 'Sand' // 'Sand'
+			id701: 'Dunst', // 'Mist'
+			id711: 'Rauch', // 'Smoke'
+			id721: 'Eingetrübt', // 'Haze'
+			id731: 'Sand-/Staubwirbel', // 'Sand/Dust Whirls'
+			id741: 'Nebel', // 'Fog'
+			id751: 'Sand', // 'Sand'
 
-			, id800: 'Wolkenlos' // 'Sky is Clear'
-			, id800d: 'Sonnig' // 'Sky is Clear' at day
-			, id800n: 'Klar' // 'Sky is Clear' at night
-			, id801: 'Leicht bewölkt' // 'Few Clouds'
-			, id802: 'Wolkig' // 'Scattered Clouds'
-			, id803: 'Stark bewölkt' // 'Broken Clouds'
-			, id804: 'Bedeckt' // 'Overcast Clouds'
+			id800: 'Wolkenlos', // 'Sky is Clear'
+			id800d: 'Sonnig', // 'Sky is Clear' at day
+			id800n: 'Klar', // 'Sky is Clear' at night
+			id801: 'Leicht bewölkt', // 'Few Clouds'
+			id802: 'Wolkig', // 'Scattered Clouds'
+			id803: 'Stark bewölkt', // 'Broken Clouds'
+			id804: 'Bedeckt', // 'Overcast Clouds'
 
-			, id900: 'Tornado' // 'Tornado'
-			, id901: 'Tropischer Sturm' // 'Tropical Storm'
-			, id902: 'Orkan' // 'Hurricane'
-			, id903: 'Kälte' // 'Cold'
-			, id904: 'Hitze' // 'Hot'
-			, id905: 'Windig' // 'Windy'
-			, id906: 'Hagel' // 'Hail'
+			id900: 'Tornado', // 'Tornado'
+			id901: 'Tropischer Sturm', // 'Tropical Storm'
+			id902: 'Orkan', // 'Hurricane'
+			id903: 'Kälte', // 'Cold'
+			id904: 'Hitze', // 'Hot'
+			id905: 'Windig', // 'Windy'
+			id906: 'Hagel', // 'Hail'
 		},
 
 		ru: {
-			owmlinktitle: 'Информация в OpenWeatherMap'
-			, temperature: 'Температура'
-			, temp_minmax: 'Макс./Мин. темп'
-			, wind: 'Ветер'
-			, gust: 'Порывы'
-			, windforce: 'Сила'
-			, direction: 'направление'
-			, rain_1h: 'Дождь'
-			, humidity: 'Влажность'
-			, pressure: 'Давление'
+			owmlinktitle: 'Информация в OpenWeatherMap',
+			temperature: 'Температура',
+			temp_minmax: 'Макс./Мин. темп',
+			wind: 'Ветер',
+			gust: 'Порывы',
+			windforce: 'Сила',
+			direction: 'направление',
+			rain_1h: 'Дождь',
+			humidity: 'Влажность',
+			pressure: 'Давление',
 
-		// weather conditions, see http://openweathermap.org/wiki/API/Weather_Condition_Codes
-		//	, id200: 'Thunderstorm with Light Rain'
-		//	, id201: 'Thunderstorm with Rain'
-		//	, id202: 'Thunderstorm with Heavy Rain'
-		//	, id210: 'Light Thunderstorm'
-		//	, id211: 'Thunderstorm'
-		//	, id212: 'Heavy Thunderstorm'
-		//	, id221: 'Ragged Thunderstorm'
-		//	, id230: 'Thunderstorm with Light Drizzle'
-		//	, id231: 'Thunderstorm with Drizzle'
-		//	, id232: 'Thunderstorm with Heavy Drizzle'
+			// weather conditions, see http://openweathermap.org/wiki/API/Weather_Condition_Codes
+		//	id200: 'Thunderstorm with Light Rain',
+		//	id201: 'Thunderstorm with Rain',
+		//	id202: 'Thunderstorm with Heavy Rain',
+		//	id210: 'Light Thunderstorm',
+		//	id211: 'Thunderstorm',
+		//	id212: 'Heavy Thunderstorm',
+		//	id221: 'Ragged Thunderstorm',
+		//	id230: 'Thunderstorm with Light Drizzle',
+		//	id231: 'Thunderstorm with Drizzle',
+		//	id232: 'Thunderstorm with Heavy Drizzle',
 
-		//	, id300: 'Light Intensity Drizzle'
-			, id301: 'Морось' // 'Drizzle'
-		//	, id302: 'Heavy Intensity Drizzle'
-		//	, id310: 'Light Intensity Drizzle Rain'
-		//	, id311: 'Drizzle Rain'
-		//	, id312: 'Heavy Intensity Drizzle Rain'
-		//	, id321: 'Shower Drizzle'
+		//	id300: 'Light Intensity Drizzle',
+			id301: 'Морось', // 'Drizzle'
+		//	id302: 'Heavy Intensity Drizzle',
+		//	id310: 'Light Intensity Drizzle Rain',
+		//	id311: 'Drizzle Rain',
+		//	id312: 'Heavy Intensity Drizzle Rain',
+		//	id321: 'Shower Drizzle',
 
-			, id500: 'Небольшой дождь' //'Light Rain'
-			, id501: 'Дождь' // 'Moderate Rain'
-			, id502: 'Сильный дождь' //'Heavy Intensity Rain'
-			, id503: 'Очень сильный дождь' //'Very Heavy Rain'
-			, id504: 'Сильный ливень' // 'Extreme Rain'
-			, id511: 'Ледяной дождь' // 'Freezing Rain'
-			, id520: 'Кратковременный слабый дождь' //'Light Intensity Shower Rain'
-			, id521: 'Кратковременный дождь' //'Shower Rain'
-			, id522: 'Кратковременный сильный дождь' //'Heavy Intensity Shower Rain'
+			id500: 'Небольшой дождь', //'Light Rain'
+			id501: 'Дождь', // 'Moderate Rain'
+			id502: 'Сильный дождь', //'Heavy Intensity Rain'
+			id503: 'Очень сильный дождь', //'Very Heavy Rain'
+			id504: 'Сильный ливень', // 'Extreme Rain'
+			id511: 'Ледяной дождь', // 'Freezing Rain'
+			id520: 'Кратковременный слабый дождь', //'Light Intensity Shower Rain'
+			id521: 'Кратковременный дождь', //'Shower Rain'
+			id522: 'Кратковременный сильный дождь', //'Heavy Intensity Shower Rain'
 
-			, id600: 'Слабый снег' // 'Light Snow'
-			, id601: 'Снег' // 'Snow'
-			, id602: 'Сильный снег' // 'Heavy Snow'
-			, id611: 'Снег с дождем' //'Sleet' 
-			, id621: 'Кратковременный снег' // 'Shower Snow'
-			, id622: 'Кратковременный сильный снег' //'Heavy Shower Snow'
+			id600: 'Слабый снег', // 'Light Snow'
+			id601: 'Снег', // 'Snow'
+			id602: 'Сильный снег', // 'Heavy Snow'
+			id611: 'Снег с дождем', //'Sleet' 
+			id621: 'Кратковременный снег', // 'Shower Snow'
+			id622: 'Кратковременный сильный снег', //'Heavy Shower Snow'
 
-		//	, id701: 'Mist'
-			, id711: 'Задымление' //'Smoke'
-		//	, id721: 'Haze'
-		//	, id731: 'Sand/Dust Whirls'
-		//	, id741: 'Fog'
-		//	, id751: 'Sand'
+		//	id701: 'Mist',
+			id711: 'Задымление', //'Smoke'
+		//	id721: 'Haze',
+		//	id731: 'Sand/Dust Whirls',
+		//	id741: 'Fog',
+		//	id751: 'Sand',
 
-			, id800: 'Ясно' // 'Sky is Clear'
-			, id801: 'Малооблачно' // 'Few Clouds'
-			, id802: 'Переменная облачность' // 'Scattered Clouds'
-			, id803: 'Облачно с прояснениями' // 'Broken Clouds'
-			, id804: 'Облачно' // 'Overcast Clouds'
+			id800: 'Ясно', // 'Sky is Clear'
+			id801: 'Малооблачно', // 'Few Clouds'
+			id802: 'Переменная облачность', // 'Scattered Clouds'
+			id803: 'Облачно с прояснениями', // 'Broken Clouds'
+			id804: 'Облачно', // 'Overcast Clouds'
 
-			, id900: 'Торнадо' // 'Tornado'
-		//	, id901: 'Tropical Storm'
-			, id902: 'Ураган' // 'Hurricane'
-			, id903: 'Холод'//'Cold'
-			, id904: 'Жара'//'Hot'
-			, id905: 'Ветрено'//'Windy'
-			, id906: 'Γрад' // 'Hail'
+			id900: 'Торнадо', // 'Tornado
+		//	id901: 'Tropical Storm',
+			id902: 'Ураган', // 'Hurricane'
+			id903: 'Холод', //'Cold'
+			id904: 'Жара', //'Hot'
+			id905: 'Ветрено', //'Windy'
+			id906: 'Γрад', // 'Hail
 		},
 
 		fr: {
-			owmlinktitle: 'Détails à OpenWeatherMap'
-			, temperature: 'Température'
-			, temp_minmax: 'Temp. min/max'
-			, wind: 'Vent'
-			, gust: 'Rafales'
-			, windforce: 'Force du vent'
-			, direction: 'Direction'
-			, rain_1h: 'Pluie'
-			, humidity: 'Humidité'
-			, pressure: 'Pression'
+			owmlinktitle: 'Détails à OpenWeatherMap',
+			temperature: 'Température',
+			temp_minmax: 'Temp. min/max',
+			wind: 'Vent',
+			gust: 'Rafales',
+			windforce: 'Force du vent',
+			direction: 'Direction',
+			rain_1h: 'Pluie',
+			humidity: 'Humidité',
+			pressure: 'Pression',
 
-		// Les conditions météorologiques, voir http://openweathermap.org/wiki/API/Weather_Condition_Codes
-			, id200: 'Orage avec pluie légère' // 'Thunderstorm with Light Rain'
-			, id201: 'Orage avec pluie' // 'Thunderstorm with Rain'
-			, id202: 'Orage avec fortes précipitations' // 'Thunderstorm with Heavy Rain'
-		//	, id210: 'Light Thunderstorm'
-			, id211: 'Orage'
-			, id212: 'Orage violent' // 'Heavy Thunderstorm'
-		//	, id221: 'Ragged Thunderstorm'
-			, id230: 'Orage avec bruine faible' // 'Thunderstorm with Light Drizzle'
-			, id231: 'Orage avec bruine' // 'Thunderstorm with Drizzle'
-		//	, id232: 'Thunderstorm with Heavy Drizzle'
+			// Les conditions météorologiques, voir http://openweathermap.org/wiki/API/Weather_Condition_Codes,
+			id200: 'Orage avec pluie légère', // 'Thunderstorm with Light Rain'
+			id201: 'Orage avec pluie', // 'Thunderstorm with Rain'
+			id202: 'Orage avec fortes précipitations', // 'Thunderstorm with Heavy Rain'
+		//	id210: 'Light Thunderstorm',
+			id211: 'Orage',
+			id212: 'Orage violent', // 'Heavy Thunderstorm'
+		//	id221: 'Ragged Thunderstorm',
+			id230: 'Orage avec bruine faible', // 'Thunderstorm with Light Drizzle'
+			id231: 'Orage avec bruine', // 'Thunderstorm with Drizzle'
+		//	id232: 'Thunderstorm with Heavy Drizzle',
 
-		//	, id300: 'Light Intensity Drizzle'
-			, id301: 'Bruine' // 'Drizzle'
-		//	, id302: 'Heavy Intensity Drizzle'
-		//	, id310: 'Light Intensity Drizzle Rain'
-		//	, id311: 'Drizzle Rain'
-		//	, id312: 'Heavy Intensity Drizzle Rain'
-		//	, id321: 'Shower Drizzle'
+		//	id300: 'Light Intensity Drizzle',
+			id301: 'Bruine', // 'Drizzle'
+		//	id302: 'Heavy Intensity Drizzle',
+		//	id310: 'Light Intensity Drizzle Rain',
+		//	id311: 'Drizzle Rain',
+		//	id312: 'Heavy Intensity Drizzle Rain',
+		//	id321: 'Shower Drizzle',
 
-			, id500: 'Pluie légère' // 'Light Rain'
-			, id501: 'Pluie modérée' // 'Moderate Rain'
-			, id502: 'Pluie battante' // 'Heavy Intensity Rain'
-		//	, id503: 'Very Heavy Rain'
-		//	, id504: 'Extreme Rain'
-			, id511: 'Pluie verglassante' // 'Freezing Rain'
-			, id520: 'Averses de pluie fine' // 'Light Intensity Shower Rain'
-		//	, id521: 'Shower Rain'
-		//	, id522: 'Heavy Intensity Shower Rain'
+			id500: 'Pluie légère', // 'Light Rain'
+			id501: 'Pluie modérée', // 'Moderate Rain'
+			id502: 'Pluie battante', // 'Heavy Intensity Rain'
+		//	id503: 'Very Heavy Rain',
+		//	id504: 'Extreme Rain',
+			id511: 'Pluie verglassante', // 'Freezing Rain'
+			id520: 'Averses de pluie fine', // 'Light Intensity Shower Rain'
+		//	id521: 'Shower Rain',
+		//	id522: 'Heavy Intensity Shower Rain',
 
-			, id600: 'Légers flocons' // 'Light Snow'
-			, id601: 'Neige' // 'Snow'
-			, id602: 'Fortes chutes de neige' // 'Heavy Snow'
-			, id611: 'Neige fondue' // 'Sleet'
-			, id621: 'Averses de neige' // 'Shower Snow'
-			, id622: 'Fortes chutes de neige' // 'Heavy Shower Snow'
+			id600: 'Légers flocons', // 'Light Snow'
+			id601: 'Neige', // 'Snow'
+			id602: 'Fortes chutes de neige', // 'Heavy Snow'
+			id611: 'Neige fondue', // 'Sleet'
+			id621: 'Averses de neige', // 'Shower Snow'
+			id622: 'Fortes chutes de neige', // 'Heavy Shower Snow'
 
-			, id701: 'Brume' // 'Mist'
-			, id711: 'Fumée' // 'Smoke'
-			, id721: 'Brume' // 'Haze'
-			, id731: 'Tourbillons de sable/poussière' // 'Sand/Dust Whirls'
-			, id741: 'Brouillard' // 'Fog'
-		//	, id751: 'Sand'
+			id701: 'Brume', // 'Mist'
+			id711: 'Fumée', // 'Smoke'
+			id721: 'Brume', // 'Haze'
+			id731: 'Tourbillons de sable/poussière', // 'Sand/Dust Whirls'
+			id741: 'Brouillard', // 'Fog'
+		//	id751: 'Sand',
 
-			, id800: 'Ciel dégagé' // 'Sky is Clear'
-			, id801: 'Ciel voilé'
-			, id802: 'Nuageux' // 'Scattered Clouds'
-			, id803: 'Nuageux' // 'Broken Clouds'
-			, id804: 'Ciel couvert' // 'Overcast Clouds'
+			id800: 'Ciel dégagé', // 'Sky is Clear'
+			id801: 'Ciel voilé',
+			id802: 'Nuageux', // 'Scattered Clouds'
+			id803: 'Nuageux', // 'Broken Clouds'
+			id804: 'Ciel couvert', // 'Overcast Clouds'
 
-			, id900: 'Tornade' // 'Tornado'
-			, id901: 'Tempête tropicale'// 'Tropical Storm'
-			, id902: 'Ouragan' // 'Hurricane'
-			, id903: 'Froid' // 'Cold'
-			, id904: 'Chaleur' // 'Hot'
-			, id905: 'Venteux' // 'Windy'
-			, id906: 'Grêle' // 'Hail'
+			id900: 'Tornade', // 'Tornado'
+			id901: 'Tempête tropicale', // 'Tropical Storm'
+			id902: 'Ouragan', // 'Hurricane'
+			id903: 'Froid', // 'Cold'
+			id904: 'Chaleur', // 'Hot'
+			id905: 'Venteux', // 'Windy'
+			id906: 'Grêle', // 'Hail'
 		}
 	}
 };
