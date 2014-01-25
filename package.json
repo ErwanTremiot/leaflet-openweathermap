@@ -1,0 +1,27 @@
+{
+  "name": "leaflet-openweathermap",
+  "version": "0.1.0",
+  "description": "A Leaflet extension to get OpenWeatherMaps layers",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ErwanTremiot/leaflet-openweathermap.git"
+  },
+  "keywords": [
+    "OpenWeatherMap",
+    "Leaflet"
+  ],
+  "author": "Erwan Trémiot",
+  "license": "CC0",
+  "bugs": {
+    "url": "https://github.com/ErwanTremiot/leaflet-openweathermap/issues"
+  },
+  "homepage": "https://github.com/ErwanTremiot/leaflet-openweathermap",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-coffee": "~0.8.2",
+    "grunt-coffeelint": "0.0.8",
+    "load-grunt-tasks": "~0.2.1",
+    "grunt-contrib-watch": "~0.5.3"
+  }
+}
