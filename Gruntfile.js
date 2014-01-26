@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     watch: {
       js: {
-        files: '*.js',
+        files: '**/*.js',
         tasks: ['js'],
         options: {
           interrupt: true,
@@ -20,7 +20,10 @@ module.exports = function(grunt) {
       },
     },
     jshint: {
-      all: ['Gruntfile.js', '*.js']
+      all: ['Gruntfile.js', '**/*.js'],
+      options: {
+        ignores: ['node_modules/**/*.js']
+      }
     },
     coffeecompile: {
       app: {
