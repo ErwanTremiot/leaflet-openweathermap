@@ -845,5 +845,7 @@ L.OWM.Utils = {
 		elem.type = 'text/javascript';
 		document.getElementsByTagName('body')[0].appendChild(elem);
 		return { abort: abort };
-	}
+	},
+	
+	i18n: {}
 };
