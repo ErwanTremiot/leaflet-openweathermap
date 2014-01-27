@@ -398,119 +398,155 @@
 		},
 
 		_createPopup: function(station) {
-			var showLink = typeof station.id != 'undefined' && this.options.showOwmStationLink;
-			var txt = '<div class="owm-popup-name">';
+			var showLink = typeof station.id != 'undefined' && this.options.showOwmStationLink,
+				domUtils = L.DomUtil,
+				$popupName = domUtils.create('div', 'owm-popup-name');
 			if (showLink) {
 				var typ = 'station';
 				if (typeof station.weather != 'undefined') {
 					typ = 'city';
 				}
-				txt += '<a href="http://openweathermap.org/' + typ + '/' + station.id + '" target="_blank" title="' + 
-					this.i18n('owmlinktitle', 'Details at OpenWeatherMap') + '">';
+				$popupName.innerHTML = '<a href="http://openweathermap.org/' + typ + '/' + station.id +
+					'" target="_blank" title="' + this.i18n('owmlinktitle', 'Details at OpenWeatherMap') + '">' +
+					station.name + '</a>';
+			} else {
+				$popupName.innerHTML = station.name;
 			}
-			txt += station.name;
-			if (showLink) {
-				txt += '</a>';
-			}
-			txt += '</div>';
 			if (typeof station.weather != 'undefined' && typeof station.weather[0] != 'undefined') {
 				if (typeof station.weather[0].description != 'undefined' && typeof station.weather[0].id != 'undefined') {
-					txt += '<div class="owm-popup-description">' + 
-						this.i18n('id'+station.weather[0].id, station.weather[0].description + ' (' + station.weather[0].id + ')') + 
-						'</div>';
+					$popupDescription = domUtils.create(
+						'div',
+						'owm-popup-description'
+					);
+					$popupDescription.innerHTML = this.i18n('id'+station.weather[0].id, station.weather[0].description +
+						' (' + station.weather[0].id + ')');
 				}
 			}
-			var imgData = this._getImageData(station);
-			txt += '<div class="owm-popup-main"><img src="' + imgData.url + '" width="' + imgData.width +
-				'" height="' + imgData.height + '" border="0" />';
+			var imgData = this._getImageData(station),
+				$popupMain = domUtils.create(
+					'div', 
+					'owm-popup-main'
+				);
+				$popupMain.innerHTML = '<img src="' + imgData.url + '" width="' + imgData.width + 'height="' + imgData.height + '" border="0" />';
+			
 			if (typeof station.main != 'undefined' && typeof station.main.temp != 'undefined') {
-				txt += '<span class="owm-popup-temp">' + this._temperatureConvert(station.main.temp) +
-					'&nbsp;' + this._displayTemperatureUnit() + '</span>';
+				$popupTemp = domUtils.create(
+					'span', 
+					'owm-popup-temp', 
+					$popupMain
+				);
+				$popupTemp.innerHTML = this._temperatureConvert(station.main.temp) + '&nbsp;' + this._displayTemperatureUnit();
 			}
-			txt += '</div>';
-			txt += '<div class="owm-popup-details">';
+			
+			var $popupDetails = domUtils.create('div', 'owm-popup-details');
 			if (typeof station.main != 'undefined') {
 				if (typeof station.main.humidity != 'undefined') {
-					txt += '<div class="owm-popup-detail">' +
-						this.i18n('humidity', 'Humidity') +
-						': ' + station.main.humidity + '&nbsp;%</div>';
+					$humidity = domUtils.create(
+						'div',
+						'owm-popup-detail',
+						$popupDetails
+					);
+					$humidity.innerHTML = this.i18n('humidity', 'Humidity') + ': ' + station.main.humidity + '&nbsp;%';
 				}
 				if (typeof station.main.pressure != 'undefined') {
-					txt += '<div class="owm-popup-detail">' +
-						this.i18n('pressure', 'Pressure') +
-						': ' + station.main.pressure + '&nbsp;hPa</div>';
+					$pressure = domUtils.create(
+						'div',
+						'owm-popup-detail',
+						$popupDetails
+					);
+					$pressure.innerHTML = this.i18n('pressure', 'Pressure') + ': ' + station.main.pressure + '&nbsp;hPa';
 				}
 				if (this.options.showTempMinMax) {
 					if (typeof station.main.temp_max != 'undefined' && typeof station.main.temp_min != 'undefined') {
-						txt += '<div class="owm-popup-detail">' +
-							this.i18n('temp_minmax', 'Temp. min/max') +
-							': ' +
-							this._temperatureConvert(station.main.temp_min) +
-							'&nbsp;/&nbsp;' +
-							this._temperatureConvert(station.main.temp_max) +
-							'&nbsp;' + this._displayTemperatureUnit() + '</div>';
+						$tmin_max = domUtils.create(
+							'div',
+							'owm-popup-detail',
+							$popupDetails
+						);
+						$tmin_max.innerHTML = this.i18n('temp_minmax', 'Temp. min/max') + ': ' +
+							this._temperatureConvert(station.main.temp_min) + '&nbsp;/&nbsp;' +
+							this._temperatureConvert(station.main.temp_max) + '&nbsp;' + this._displayTemperatureUnit();
 					}
 				}
 			}
 			if (typeof station.rain != 'undefined' && typeof station.rain['1h'] != 'undefined') {
-				txt += '<div class="owm-popup-detail">' +
-					this.i18n('rain_1h', 'Rain (1h)') +
-					': ' + station.rain['1h'] + '&nbsp;ml</div>';
+				$rain = domUtils.create(
+					'div',
+					'owm-popup-detail',
+					$popupDetails
+				);
+				$rain.innerHTML = this.i18n('rain_1h', 'Rain (1h)') + ': ' + station.rain['1h'] + '&nbsp;ml';
 			}
 			if (typeof station.wind != 'undefined') {
 				if (typeof station.wind.speed != 'undefined') {
-					txt += '<div class="owm-popup-detail">';
+					$windSpeed = domUtils.create(
+						'div',
+						'owm-popup-detail',
+						$popupDetails
+					);
 					if (this.options.showWindSpeed == 'beaufort' || this.options.showWindSpeed == 'both') {
-						txt += this.i18n('windforce', 'Wind Force') +
+						windSpeedText = this.i18n('windforce', 'Wind Force') +
 							': ' + this._windMsToBft(station.wind.speed);
 						if (this.options.showWindSpeed == 'both') {
-							txt += '&nbsp;(' + this._convertSpeed(station.wind.speed) + '&nbsp;' +
+							windSpeedText += '&nbsp;(' + this._convertSpeed(station.wind.speed) + '&nbsp;' +
 								this._displaySpeedUnit() + ')';
 						}
 					} else {
-						txt += this.i18n('wind', 'Wind') + ': ' +
-							this._convertSpeed(station.wind.speed) + '&nbsp;' +
-							this._displaySpeedUnit();
+						windSpeedText = this.i18n('wind', 'Wind') + ': ' +
+							this._convertSpeed(station.wind.speed) + '&nbsp;' + this._displaySpeedUnit();
 					}
-					txt += '</div>';
+					$windSpeed.innerHTML = windSpeedText;
 				}
 				if (typeof station.wind.gust != 'undefined') {
-					txt += '<div class="owm-popup-detail">';
+					$windGust = domUtils.create(
+						'div',
+						'owm-popup-detail',
+						$popupDetails
+					);
 					if (this.options.showWindSpeed == 'beaufort' || this.options.showWindSpeed == 'both') {
-						txt += this.i18n('gust', 'Gust') +
-							': ' + this._windMsToBft(station.wind.gust);
+						windGustText = this.i18n('gust', 'Gust') + ': ' + this._windMsToBft(station.wind.gust);
 						if (this.options.showWindSpeed == 'both') {
-							txt += '&nbsp;(' + this._convertSpeed(station.wind.gust) + '&nbsp;' +
+							windGustText += '&nbsp;(' + this._convertSpeed(station.wind.gust) + '&nbsp;' +
 								this._displaySpeedUnit() + ')';
 						}
 					} else {
-						txt += this.i18n('gust', 'Gust') + ': ' +
-							this._convertSpeed(station.wind.gust) + '&nbsp;' +
-							this._displaySpeedUnit();
+						windGustText = this.i18n('gust', 'Gust') + ': ' +
+							this._convertSpeed(station.wind.gust) + '&nbsp;' + this._displaySpeedUnit();
 					}
-					txt += '</div>';
+					$windGust.innerHTML = windGustText;
 				}
 				if (typeof station.wind.deg != 'undefined') {
-					txt += '<div class="owm-popup-detail">';
-					txt += this.i18n('direction', 'Windrichtung') + ': ';
+					$windDeg = domUtils.create(
+						'div',
+						'owm-popup-detail',
+						$popupDetails
+					);
+					windDegText = this.i18n('direction', 'Windrichtung') + ': ';
 					if (this.options.showWindDirection == 'desc' || this.options.showWindDirection == 'both') {
-						txt += this._directions[(station.wind.deg/22.5).toFixed(0)];
+						windDegText += this._directions[(station.wind.deg/22.5).toFixed(0)];
 						if (this.options.showWindDirection == 'both') {
-							txt += '&nbsp;(' + station.wind.deg + '°)';
+							windDegText += '&nbsp;(' + station.wind.deg + '°)';
 						}
 					} else {
-						txt += station.wind.deg + '°';
+						windDegText += station.wind.deg + '°';
 					}
-					txt += '</div>';
+					$windDeg.innerHTML = windDegText;
 				}
 			}
 			if (typeof station.dt != 'undefined' && this.options.showTimestamp) {
-				txt += '<div class="owm-popup-timestamp">';
-				txt += '(' + this._convertTimestamp(station.dt) + ')';
-				txt += '</div>';
+				$popupTimestamp = domUtils.create(
+					'div',
+					'owm-popup-timestamp',
+					$popupDetails
+				);
+				$popupTimestamp.innerHTML = '(' + this._convertTimestamp(station.dt) + ')';
 			}
-			txt += '</div>';
-			return txt;
+			var $finalDiv = domUtils.create('div');
+			$finalDiv.appendChild($popupName);
+			$finalDiv.appendChild($popupDescription);
+			$finalDiv.appendChild($popupMain);
+			$finalDiv.appendChild($popupDetails);
+			return $finalDiv;
 		},
 
 		_getImageData: function(station) {
